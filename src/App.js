@@ -51,32 +51,35 @@ const App = () => {
           <form onSubmit={handleSubmit}>
             <h1>Login</h1>
             <div className="input-box">
-              <label htmlFor="email" className="form-label">
-                Email address
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                name="email"
-                value={credentials.email}
-                onChange={onChange}
-                required
-              />
+               
+              <div className="input-wrapper">
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={credentials.email}
+                  onChange={onChange}
+                  required
+                />
+                <i class="fa-solid fa-user"></i>
+                <i className="fa-solid fa-user"></i>
+              </div>
             </div>
             <div className="input-box">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+              
               <input
                 type="password"
                 className="form-control"
                 id="password"
                 name="password"
+                 placeholder="Password"
                 value={credentials.password}
                 onChange={onChange}
                 required
               />
+              <i class="fa-solid fa-lock"></i>
             </div>
             <button type="submit" className="btn">
               Login
@@ -88,47 +91,47 @@ const App = () => {
           <form onSubmit={handleSubmit}>
             <h1>Signup</h1>
             <div className="input-box">
-              <label htmlFor="name" className="form-label">
-                User Name
-              </label>
+               
               <input
                 type="text"
                 className="form-control"
                 id="name"
                 name="name"
+                placeholder="User Name"
                 value={credentials.name}
                 onChange={onChange}
                 required
               />
+              <i class="fa-solid fa-user"></i>
             </div>
             <div className="input-box">
-              <label htmlFor="email" className="form-label">
-                Email address
-              </label>
+             
               <input
                 type="email"
                 className="form-control"
                 id="email"
                 name="email"
+                placeholder="Emmail address"
                 value={credentials.email}
                 onChange={onChange}
                 required
               />
+              <i class="fa-solid fa-envelope"></i>
             </div>
             <div className="input-box">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+            
               <input
                 type="password"
                 className="form-control"
                 id="password"
                 name="password"
+                placeholder="Password"
                 value={credentials.password}
                 onChange={onChange}
                 minLength={5}
                 required
               />
+              <i class="fa-solid fa-lock"></i>
             </div>
 
             <button type="submit" className="btn">
