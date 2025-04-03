@@ -21,7 +21,7 @@ const App = () => {
     e.preventDefault();
     const endpoint = isLogin
       ? "http://localhost:5000/api/auth/login"
-      : "http://localhost:5000/api/auth/signup";
+      : "http://localhost:5000/api/auth/createuser";
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -37,6 +37,8 @@ const App = () => {
     if (json.success) {
       localStorage.setItem("token", json.authtoken);
       navigate("/");
+      alert("Login successful");
+      navigate('/home');
     } else {
       alert("Invalid credentials");
     }
