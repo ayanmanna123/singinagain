@@ -70,13 +70,20 @@ const Home = () => {
         </div>
       </nav>
 
-      <div style={{ marginTop: "100px", padding: "20px" }}>
+      <div style={{ marginTop: "100px", padding: "20px" }} className="my-4 mx-3"> 
         <button
           type="button"
           className="btn btn-primary"
           onClick={() => navigate('/quize')}
         >
           Start Quiz
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => navigate('/scoure')}
+        >
+           See score
         </button>
       </div>
     </>
