@@ -22,9 +22,10 @@ const quizReportSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  // Optional field if user system is there
   user: {
-    type: String // could be userId or email
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user', // 👈 this is key for populate to work
+    required: true
   }
 });
 

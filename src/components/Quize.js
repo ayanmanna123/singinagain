@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   { id: 9, name: "General Knowledge" },
@@ -28,6 +29,8 @@ const categories = [
 ];
 
 const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+
+
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -77,44 +80,49 @@ export default function App() {
       setCurrentQ(currentQ - 1);
     }
   };
-const submitQuiz = async () => {
-  let total = 0;
-  questions.forEach((q, index) => {
-    if (answers[index] === q.answer) total += 1;
-  });
-  setScore(total);
-  setShowScore(true);
-
-  // Convert ID to name
-  const categoryName = categories.find(c => c.id.toString() === selectedCategory)?.name;
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const response = await fetch("http://localhost:5000/api/report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": token,
-      },
-      body: JSON.stringify({
-        category: categoryName, // send name instead of ID
-        difficulty: selectedDifficulty,
-        score: total,
-        totalQuestions: questions.length,
-      }),
+  const navigate = useNavigate();
+  const submitQuiz = async () => {
+    let total = 0;
+    questions.forEach((q, index) => {
+      if (answers[index] === q.answer) total += 1;
     });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || "Failed to save report");
+  
+    setScore(total);
+    setShowScore(true); // <-- this triggers result display
+  
+    const categoryName = categories.find(c => c.id.toString() === selectedCategory)?.name;
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": token,
+        },
+        body: JSON.stringify({
+          category: categoryName,
+          difficulty: selectedDifficulty,
+          score: total,
+          totalQuestions: questions.length,
+        }),
+      });
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save report");
+      }
+  
+      console.log("✅ Quiz report saved:", data);
+    } catch (err) {
+      console.error("❌ Failed to save quiz report:", err.message);
     }
-
-    console.log("✅ Quiz report saved:", data);
-  } catch (err) {
-    console.error("❌ Failed to save quiz report:", err.message);
-  }
-};
+  
+    // ✅ Wait 5 seconds before navigating
+     // <-- you can increase/decrease the time as needed
+  };
+  
+  
 
   
 
@@ -247,6 +255,7 @@ const submitQuiz = async () => {
                 <button onClick={submitQuiz} style={{ marginLeft: "10px" }}>
                   Submit
                 </button>
+                
               )}
           </div>
         </div>

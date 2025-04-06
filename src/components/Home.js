@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Quize from "./Quize";
 import Soure from "./Soure";
+import TopScores from "./TopScores";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ const Home = () => {
 
       {/* Score Report */}
       <Soure />
+      <TopScores />
     </div>
     </>
   );
