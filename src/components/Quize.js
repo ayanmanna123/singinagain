@@ -77,45 +77,45 @@ export default function App() {
       setCurrentQ(currentQ - 1);
     }
   };
-  const submitQuiz = async () => {
-    let total = 0;
-    questions.forEach((q, index) => {
-      if (answers[index] === q.answer) total += 1;
+const submitQuiz = async () => {
+  let total = 0;
+  questions.forEach((q, index) => {
+    if (answers[index] === q.answer) total += 1;
+  });
+  setScore(total);
+  setShowScore(true);
+
+  // Convert ID to name
+  const categoryName = categories.find(c => c.id.toString() === selectedCategory)?.name;
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch("http://localhost:5000/api/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+      body: JSON.stringify({
+        category: categoryName, // send name instead of ID
+        difficulty: selectedDifficulty,
+        score: total,
+        totalQuestions: questions.length,
+      }),
     });
-    setScore(total);
-    setShowScore(true);
-  
-    // Convert ID to name
-    const categoryName = categories.find(c => c.id.toString() === selectedCategory)?.name;
-  
-    const token = localStorage.getItem("token");
-  
-    try {
-      const response = await fetch("http://localhost:5000/api/report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-        body: JSON.stringify({
-          category: categoryName, // send name instead of ID
-          difficulty: selectedDifficulty,
-          score: total,
-          totalQuestions: questions.length,
-        }),
-      });
-  
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to save report");
-      }
-  
-      console.log("✅ Quiz report saved:", data);
-    } catch (err) {
-      console.error("❌ Failed to save quiz report:", err.message);
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to save report");
     }
-  };
-  
+
+    console.log("✅ Quiz report saved:", data);
+  } catch (err) {
+    console.error("❌ Failed to save quiz report:", err.message);
+  }
+};
+
   
 
   useEffect(() => {

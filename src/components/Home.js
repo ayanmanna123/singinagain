@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Quize from "./Quize";
+import Soure from "./Soure";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -69,23 +71,17 @@ const Home = () => {
           </div>
         </div>
       </nav>
-
-      <div style={{ marginTop: "100px", padding: "20px" }} className="my-4 mx-3"> 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => navigate('/quize')}
-        >
-          Start Quiz
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => navigate('/scoure')}
-        >
-           See score
-        </button>
+      <div className="py-5" >
+      {/* Center the Quize component */}
+      <div className="row justify-content-center mb-4">
+        <div className="col-md-4 col-sm-10 my-5 ">
+          <Quize />
+        </div>
       </div>
+
+      {/* Score Report */}
+      <Soure />
+    </div>
     </>
   );
 };
