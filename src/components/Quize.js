@@ -12,7 +12,7 @@ const categories = [
   { id: 16, name: "Entertainment: Board Games" },
   { id: 17, name: "Science & Nature" },
   { id: 18, name: "Science: Computers" },
-  { id: 19, name: "Science: Mathematics" },
+   
   { id: 20, name: "Mythology" },
   { id: 21, name: "Sports" },
   { id: 22, name: "Geography" },
@@ -28,22 +28,22 @@ const categories = [
   { id: 32, name: "Entertainment: Cartoon & Animations" },
 ];
 
-
 const shuffle = (array) => array.sort(() => Math.random() - 0.5);
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [questions, setQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
-  const [quizTime, setQuizTime] = useState(1800); // 30 minutes
+  const [quizTime, setQuizTime] = useState(1800);
   const [answers, setAnswers] = useState([]);
   const [alerted, setAlerted] = useState(false);
 
-  const fetchQuestions = async (categoryId) => {
+  const fetchQuestions = async (categoryId, difficulty) => {
     const res = await fetch(
-      `https://opentdb.com/api.php?amount=10&category=${categoryId}&type=multiple`
+      `https://opentdb.com/api.php?amount=10&category=${categoryId}&difficulty=${difficulty}&type=multiple`
     );
     const data = await res.json();
     const formatted = data.results.map((q) => ({
@@ -118,8 +118,8 @@ export default function App() {
     const correct = questions[index].answer;
     const selected = answers[index];
 
-    if (opt === correct) return { backgroundColor: "#c8f7c5" }; // green
-    if (opt === selected) return { backgroundColor: "#f7c5c5" }; // red
+    if (opt === correct) return { backgroundColor: "#c8f7c5" };
+    if (opt === selected) return { backgroundColor: "#f7c5c5" };
     return {};
   };
 
@@ -148,10 +148,24 @@ export default function App() {
               </option>
             ))}
           </select>
+
+          <label>Select Difficulty:</label>
+          <select
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Choose difficulty
+            </option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+
           <br />
           <button
-            onClick={() => fetchQuestions(selectedCategory)}
-            disabled={!selectedCategory}
+            onClick={() => fetchQuestions(selectedCategory, selectedDifficulty)}
+            disabled={!selectedCategory || !selectedDifficulty}
           >
             Start Quiz
           </button>
@@ -227,9 +241,9 @@ export default function App() {
 
                   let style = {};
                   if (isCorrect) {
-                    style.backgroundColor = "#c8f7c5"; // green
+                    style.backgroundColor = "#c8f7c5";
                   } else if (isSelected && opt !== q.answer) {
-                    style.backgroundColor = "#f7c5c5"; // red
+                    style.backgroundColor = "#f7c5c5";
                   }
 
                   return (
