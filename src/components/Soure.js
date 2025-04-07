@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import "./QuizReportList.css"; // Make sure this CSS file exists
+import React, { useEffect, useState, useRef } from "react";
+import "./QuizReportList.css";
 
 const QuizReportList = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const authToken = localStorage.getItem("token");
+
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -27,6 +29,28 @@ const QuizReportList = () => {
     fetchReports();
   }, [authToken]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(index % 2 === 0 ? "slide-in-left" : "slide-in-right");
+            entry.target.classList.remove("slide-out-left", "slide-out-right");
+          } else {
+            entry.target.classList.remove("slide-in-left", "slide-in-right");
+            entry.target.classList.add(index % 2 === 0 ? "slide-out-left" : "slide-out-right");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const items = containerRef.current?.querySelectorAll(".quiz-report-item");
+    items?.forEach((item) => observer.observe(item));
+
+    return () => items?.forEach((item) => observer.unobserve(item));
+  }, [reports]);
+
   if (loading) return <p>Loading quiz reports...</p>;
 
   if (reports.length === 0) return <p>No reports available</p>;
@@ -35,7 +59,7 @@ const QuizReportList = () => {
   const highestScore = sortedReports[0];
 
   return (
-    <div className="quiz-report-container">
+    <div className="quiz-report-container" ref={containerRef}>
       <h2>Your Quiz Reports</h2>
 
       <div className="highest-score-section">

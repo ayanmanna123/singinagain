@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   { id: 9, name: "General Knowledge" },
@@ -30,8 +30,6 @@ const categories = [
 
 const shuffle = (array) => array.sort(() => Math.random() - 0.5);
 
-
-
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
@@ -42,24 +40,40 @@ export default function App() {
   const [quizTime, setQuizTime] = useState(1800);
   const [answers, setAnswers] = useState([]);
   const [alerted, setAlerted] = useState(false);
+  const [amount, setAmount] = useState(10);
+  const [questionType, setQuestionType] = useState("multiple");
+
+  const navigate = useNavigate();
 
   const fetchQuestions = async (categoryId, difficulty) => {
-    const res = await fetch(
-      `https://opentdb.com/api.php?amount=10&category=${categoryId}&difficulty=${difficulty}&type=multiple`
-    );
-    const data = await res.json();
-    const formatted = data.results.map((q) => ({
-      question: q.question,
-      options: shuffle([...q.incorrect_answers, q.correct_answer]),
-      answer: q.correct_answer,
-    }));
-    setQuestions(formatted);
-    setCurrentQ(0);
-    setScore(0);
-    setShowScore(false);
-    setQuizTime(1800);
-    setAnswers(Array(formatted.length).fill(null));
-    setAlerted(false);
+    try {
+      const res = await fetch(
+        `https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=${questionType}`
+      );
+      const data = await res.json();
+
+      if (!data.results || !Array.isArray(data.results)) {
+        alert("❌ No questions found. Try a different setup.");
+        return;
+      }
+
+      const formatted = data.results.map((q) => ({
+        question: q.question,
+        options: shuffle([...q.incorrect_answers, q.correct_answer]),
+        answer: q.correct_answer,
+      }));
+
+      setQuestions(formatted);
+      setCurrentQ(0);
+      setScore(0);
+      setShowScore(false);
+      setQuizTime(1800);
+      setAnswers(Array(formatted.length).fill(null));
+      setAlerted(false);
+    } catch (err) {
+      console.error("Error fetching questions:", err);
+      alert("❌ Failed to fetch questions. Please try again.");
+    }
   };
 
   const handleAnswer = (option) => {
@@ -80,19 +94,20 @@ export default function App() {
       setCurrentQ(currentQ - 1);
     }
   };
-  const navigate = useNavigate();
+
   const submitQuiz = async () => {
     let total = 0;
     questions.forEach((q, index) => {
       if (answers[index] === q.answer) total += 1;
     });
-  
     setScore(total);
-    setShowScore(true); // <-- this triggers result display
-  
-    const categoryName = categories.find(c => c.id.toString() === selectedCategory)?.name;
+    setShowScore(true);
+
+    const categoryName = categories.find(
+      (c) => c.id.toString() === selectedCategory
+    )?.name;
     const token = localStorage.getItem("token");
-  
+
     try {
       const response = await fetch("http://localhost:5000/api/report", {
         method: "POST",
@@ -107,24 +122,17 @@ export default function App() {
           totalQuestions: questions.length,
         }),
       });
-  
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Failed to save report");
       }
-  
+
       console.log("✅ Quiz report saved:", data);
     } catch (err) {
       console.error("❌ Failed to save quiz report:", err.message);
     }
-  
-    // ✅ Wait 5 seconds before navigating
-     // <-- you can increase/decrease the time as needed
   };
-  
-  
-
-  
 
   useEffect(() => {
     if (!questions.length || showScore) return;
@@ -135,7 +143,7 @@ export default function App() {
     }
 
     if (quizTime === 60 && !alerted) {
-      alert("\u23F3 Only 1 minute remaining!");
+      alert("⏳ Only 1 minute remaining!");
       setAlerted(true);
     }
 
@@ -172,6 +180,7 @@ export default function App() {
 
       {!questions.length && (
         <>
+        <div className="form-group">
           <label>Select Category:</label>
           <select
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -200,6 +209,26 @@ export default function App() {
             <option value="hard">Hard</option>
           </select>
 
+          <div className="setup-container">
+            <label>Number of Questions______:</label>
+            <input
+              type="number"
+              min="1"
+              max="50"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </div>
+
+          <label>Question Type:</label>
+          <select
+            value={questionType}
+            onChange={(e) => setQuestionType(e.target.value)}
+          >
+            <option value="multiple">Multiple Choice</option>
+            <option value="boolean">True / False</option>
+          </select>
+
           <br />
           <button
             onClick={() => fetchQuestions(selectedCategory, selectedDifficulty)}
@@ -207,6 +236,8 @@ export default function App() {
           >
             Start Quiz
           </button>
+        
+        </div>
         </>
       )}
 
@@ -255,7 +286,6 @@ export default function App() {
                 <button onClick={submitQuiz} style={{ marginLeft: "10px" }}>
                   Submit
                 </button>
-                
               )}
           </div>
         </div>
@@ -277,13 +307,10 @@ export default function App() {
                 {q.options.map((opt, i) => {
                   const isCorrect = opt === q.answer;
                   const isSelected = answers[index] === opt;
-
                   let style = {};
-                  if (isCorrect) {
-                    style.backgroundColor = "#c8f7c5";
-                  } else if (isSelected && opt !== q.answer) {
+                  if (isCorrect) style.backgroundColor = "#c8f7c5";
+                  else if (isSelected && opt !== q.answer)
                     style.backgroundColor = "#f7c5c5";
-                  }
 
                   return (
                     <label
