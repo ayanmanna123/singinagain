@@ -95,4 +95,19 @@ router.post('/login', [
 
 
 });
+// ROUTE: Get logged in user's name and email using POST "/api/auth/getuser". Login required
+const fetchUser = require('../middleware/fetchUser');
+router.post('/getuser', fetchUser, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("name email date");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user details:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+ 
   module.exports = router

@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Quize from "./Quize";
 import Soure from "./Soure";
 import TopScores from "./TopScores";
+import { Link } from "react-router-dom";
+import Footer from "./Footer";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             React Quiz App
@@ -33,57 +35,28 @@ const Home = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+                <Link className="nav-link" to="/profile">
+                  Profile
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </nav>
-      <div className="py-5" >
-      {/* Center the Quize component */}
-      <div className="row justify-content-center mb-4">
-        <div className="col-md-4 col-sm-10 my-5 ">
-          <Quize />
+      <div className="py-5">
+        {/* Center the Quize component */}
+        <div className="row justify-content-center mb-4">
+          <div className="col-md-4 col-sm-10 my-5 ">
+            <Quize />
+          </div>
         </div>
-      </div>
 
-      {/* Score Report */}
-      <Soure />
-      <TopScores />
-    </div>
+        {/* Score Report */}
+        <Soure />
+        <TopScores />
+
+      </div>
+      <Footer />
     </>
   );
 };
