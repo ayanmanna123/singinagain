@@ -180,64 +180,65 @@ export default function App() {
 
       {!questions.length && (
         <>
-        <div className="form-group">
-          <label>Select Category:</label>
-          <select
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Choose a category
-            </option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
+          <div className="form-group">
+            <label>Select Category:</label>
+            <select
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Choose a category
               </option>
-            ))}
-          </select>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
 
-          <label>Select Difficulty:</label>
-          <select
-            onChange={(e) => setSelectedDifficulty(e.target.value)}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Choose difficulty
-            </option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+            <label>Select Difficulty:</label>
+            <select
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Choose difficulty
+              </option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
 
-          <div className="setup-container">
-            <label>Number of Questions______:</label>
-            <input
-              type="number"
-              min="1"
-              max="50"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
+            <div className="setup-container">
+              <label>Number of Questions______:</label>
+              <input
+                type="number"
+                min="1"
+                max="50"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </div>
+
+            <label>Question Type:</label>
+            <select
+              value={questionType}
+              onChange={(e) => setQuestionType(e.target.value)}
+            >
+              <option value="multiple">Multiple Choice</option>
+              <option value="boolean">True / False</option>
+            </select>
+
+            <br />
+            <button
+              onClick={() =>
+                fetchQuestions(selectedCategory, selectedDifficulty)
+              }
+              disabled={!selectedCategory || !selectedDifficulty}
+            >
+              Start Quiz
+            </button>
           </div>
-
-          <label>Question Type:</label>
-          <select
-            value={questionType}
-            onChange={(e) => setQuestionType(e.target.value)}
-          >
-            <option value="multiple">Multiple Choice</option>
-            <option value="boolean">True / False</option>
-          </select>
-
-          <br />
-          <button
-            onClick={() => fetchQuestions(selectedCategory, selectedDifficulty)}
-            disabled={!selectedCategory || !selectedDifficulty}
-          >
-            Start Quiz
-          </button>
-        
-        </div>
         </>
       )}
 
@@ -333,7 +334,19 @@ export default function App() {
             ))}
           </div>
 
-          <button onClick={() => setQuestions([])}>Try Another Category</button>
+          <button
+            onClick={() => {
+              setQuestions([]);
+              setShowScore(false); // 👈 Hide the score section
+              setScore(0); // 👈 Reset score
+              setAnswers([]); // 👈 Clear previous answers
+              setSelectedCategory(""); // 👈 Optional: reset category
+              setSelectedDifficulty(""); // 👈 Optional: reset difficulty
+            }}
+            disabled={!showScore} // 👈 Optional: disable if score isn’t being shown
+          >
+            Try Another Category
+          </button>
         </div>
       )}
     </div>

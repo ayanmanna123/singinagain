@@ -1,21 +1,29 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
 import Quize from "./Quize";
 import Soure from "./Soure";
 import TopScores from "./TopScores";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
-
+import logo from "./logo.png";
 const Home = () => {
-  const navigate = useNavigate();
+   
 
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand d-flex align-items-center"  to="/home">
+            <img
+             src={logo} // <-- replace with your logo path
+              alt="Logo"
+              width="30"
+              height="30"
+              className="d-inline-block align-top me-2"
+            />
             React Quiz App
-          </a>
+          </Link>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -30,9 +38,9 @@ const Home = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
+                <Link className="nav-link active" aria-current="page" to="/home" >
                   Home
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/profile">
@@ -54,7 +62,6 @@ const Home = () => {
         {/* Score Report */}
         <Soure />
         <TopScores />
-
       </div>
       <Footer />
     </>

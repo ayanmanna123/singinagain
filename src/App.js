@@ -63,7 +63,7 @@ const App = () => {
                   onChange={onChange}
                   required
                 />
-                <i class="fa-solid fa-user"></i>
+                <i className="fa-solid fa-user"></i>
                 <i className="fa-solid fa-user"></i>
               </div>
             </div>
@@ -79,7 +79,7 @@ const App = () => {
                 onChange={onChange}
                 required
               />
-              <i class="fa-solid fa-lock"></i>
+              <i className="fa-solid fa-lock"></i>
             </div>
             <button type="submit" className="btn">
               Login
@@ -102,7 +102,7 @@ const App = () => {
                 onChange={onChange}
                 required
               />
-              <i class="fa-solid fa-user"></i>
+              <i className="fa-solid fa-user"></i>
             </div>
             <div className="input-box">
              
@@ -116,7 +116,7 @@ const App = () => {
                 onChange={onChange}
                 required
               />
-              <i class="fa-solid fa-envelope"></i>
+              <i className="fa-solid fa-envelope"></i>
             </div>
             <div className="input-box">
             
@@ -131,7 +131,7 @@ const App = () => {
                 minLength={5}
                 required
               />
-              <i class="fa-solid fa-lock"></i>
+              <i className="fa-solid fa-lock"></i>
             </div>
 
             <button type="submit" className="btn">

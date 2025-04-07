@@ -33,9 +33,9 @@ const Userprofile = () => {
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to="/home">
             React Quiz App
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -86,7 +86,7 @@ const Userprofile = () => {
           </p>
           <li className="nav-item">
             <Link className="nav-link" to="/">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
+              <i className="fa-solid fa-right-from-bracket"></i> Logout
             </Link>
           </li>
         </div>
